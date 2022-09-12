@@ -18,7 +18,9 @@ namespace AdoProperties.Controllers
         }
         public IActionResult Index()
         {
-            return View(_adoDatabase.SqlRead<Student>("select * from Student"));
+            string query = "select * from Student";
+            var list = _adoDatabase.SqlRead<Student>(query);
+            return View(list);
         }
         [HttpGet]
         public IActionResult Insert()
@@ -28,35 +30,37 @@ namespace AdoProperties.Controllers
         [HttpPost]
         public IActionResult Insert(Student model)
         {
-            _adoDatabase.SqlCommand(string.Format("insert into Student(Name,Email) values ('{0}','{1}')", 
-                model.Name, model.Email));
+            string query = string.Format("insert into Student(Name,Email) values ('{0}','{1}')",
+                model.Name, model.Email);
+            _adoDatabase.SqlCommand(query);
             return Redirect("~/Student/Index");
         }
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var student = _adoDatabase.SqlReadScaler<Student>(string.Format("select * from Student where Id = {0}",
-                id));
+            string query = string.Format("select * from Student where Id = {0}", id);
+            var student = _adoDatabase.SqlReadScaler<Student>(query);
             return View(student);
         }
         [HttpPost]
         public IActionResult Edit(int id, Student model)
         {
-            _adoDatabase.SqlCommand(string.Format("update Student set Name='{0}' , Email='{1}' where Id = {2}", 
-                model.Name, model.Email, id));
+            string query = string.Format("update Student set Name='{0}' , Email='{1}' where Id = {2}",
+                model.Name, model.Email, id);
+            _adoDatabase.SqlCommand(query);
             return Redirect("~/Student/Index");
         }
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            _adoDatabase.SqlCommand(string.Format("delete from Student where Id = {0}", 
-                id));
+            _adoDatabase.SqlCommand(string.Format("delete from Student where Id = {0}", id));
             return Redirect("~/Student/Index");
         }
         public IActionResult Details(int id)
         {
-            return View(_adoDatabase.SqlReadScaler<Student>(string.Format("select * from Student where Id = {0}",
-                id)));
+            var data = _adoDatabase.SqlReadScaler<Student>(string.Format("select * from Student where Id = {0}",
+                id));
+            return View(data);
         }
     }
 }
