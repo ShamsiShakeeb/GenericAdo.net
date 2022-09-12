@@ -35,22 +35,9 @@ namespace AdoProperties.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            SqlConnection connection = new SqlConnection("Data Source=BS-483;Database=" + "UniversityDb" + ";Integrated Security=True");
-            connection.Open();
-            string query = "select * from Student where id = " + id;
-            SqlCommand comand = new SqlCommand(
-            query, connection);
-            var reading = comand.ExecuteReader();
-            Student students = new Student();
-            while (reading.Read())
-            {
-                var model = new Student();
-                model.Id = Convert.ToInt32(reading[0]);
-                model.Name = reading[1].ToString();
-                model.Email = reading[2].ToString();
-                students = model;
-            }
-            return View(students);
+            var student = _adoDatabase.SqlReadScaler<Student>(string.Format("select * from Student where Id = {0}",
+                id));
+            return View(student);
         }
         [HttpPost]
         public IActionResult Edit(int id, Student model)
