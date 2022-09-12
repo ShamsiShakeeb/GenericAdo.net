@@ -23,6 +23,7 @@ namespace AdoProperties.Controllers
         [HttpGet]
         public IActionResult Insert()
         {
+            ///Pore Kam Kormu
             return View();
         }
         [HttpPost]
